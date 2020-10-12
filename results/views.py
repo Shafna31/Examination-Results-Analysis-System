@@ -1,0 +1,85 @@
+from django.shortcuts import render,redirect
+from django.http import HttpResponse
+from results.forms import AddstudentsForm,StudentsreportForm,AddsubjectForm,AddusersForm,ViewreportsForm,AddmarkintoForm,ResultsviewForm
+from results.models import Login,Subjectreport,Addstudents,Studentsreport,Addsubject,Addusers,Viewreports,Addmarkinto,Resultsview
+def home(request):
+	return render(request,'results/home.html')
+def login(request):
+	
+	if request.method=="POST":
+	       userid=request.POST['userid']
+	       pwd=request.POST['pwd']
+	       data=Login.objects.create(userid=userid,pwd=pwd)
+	      
+	return render(request,"results/login.html") 
+
+# Create your views here
+def addstudent(request):
+	if request.method == "POST":
+		Entername = request.POST["Entername"]
+		Emailid = request.POST["Emailid"]
+		Contactno = request.POST["Contactno"]
+		EnterAddress = request.POST["EnterAddress"]
+		SelectYear = request.POST["SelectYear"]
+		SelectGender = request.POST["SelectGender"]
+		Rollno = request.POST["Rollno"]
+		SelectDepartment = request.POST["SelectDepartment"]
+		SelectSemester = request.POST["SelectSemester"]
+		instance = Addstudents(Entername=Entername, Emailid=Emailid,Contactno=Contactno, EnterAddress=EnterAddress, SelectYear=SelectYear, SelectGender=SelectGender, Rollno=Rollno, SelectDepartment=SelectDepartment, SelectSemester=SelectSemester)
+		instance.save()
+		return HttpResponse('Success')
+		
+	else:
+		form=AddstudentsForm()
+	return render(request,'results/addstudent.html',{'form':form})
+
+		
+def studentreport(request):
+	form=StudentsreportForm(request.POST)
+	if form.is_valid():
+		form.save()
+	context={'form':form}
+	return render(request,'results/studentreport.html',context)
+
+def addsubjects(request):
+	form=AddsubjectForm(request.POST)
+	if form.is_valid():
+		form.save()
+	context={'form':form}
+	return render(request,'results/addsubjects.html',context)
+def subjectsreport(request):
+	if request.method=="POST":
+		SelectYear = request.POST["SelectYear"]
+		SelectDepartment=request.POST['SelectDepartment']
+		SelectSemester=request.POST['SelectSemester']
+		data=Subjectreport.objects.create(SelectYear=SelectYear,SelectDepartment=SelectDepartment,SelectSemester=SelectSemester)
+	return render(request,'results/subjectsreport.html')
+def adduser(request):
+	form=AddusersForm(request.POST)
+	if form.is_valid():
+		form.save()
+	context={'form':form}
+	return render(request,'results/adduser.html',context)
+def userreport(request):
+	if request.method == "POST":
+		Entername = request.POST["Entername"]
+		Contactno = request.POST["Contactno"]
+		instance = Viewreports(Entername=Entername,Contactno=Contactno)
+		instance.save()
+		return HttpResponse('Success')
+	else:
+		form=ViewreportsForm()
+	return render(request,'results/userreport.html')
+def addmarks(request):
+	form=AddmarkintoForm(request.POST)
+	if form.is_valid():
+		form.save()
+	context={'form':form}
+	return render(request,'results/addmarks.html',context)
+def resultsanalysis(request):
+	form=ResultsviewForm(request.POST)
+	if form.is_valid():
+		form.save()
+	context={'form':form}	
+	return render(request,'results/resultsanalysis.html')
+	
