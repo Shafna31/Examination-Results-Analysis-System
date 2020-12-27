@@ -32,14 +32,51 @@ def addstudent(request):
 	else:
 		form=AddstudentsForm()
 	return render(request,'results/addstudent.html',{'form':form})
+def update(request,Rollno):
+	data=Addstudents.objects.get(Rollno=Rollno)
+	if request.method=="POST":
+		Entername = request.POST["Entername"]
+		Emailid = request.POST["Emailid"]
+		Contactno = request.POST["Contactno"]
+		EnterAddress = request.POST["EnterAddress"]
+		SelectYear = request.POST["SelectYear"]
+		SelectGender = request.POST["SelectGender"]
+		Rollno = request.POST["Rollno"]
+		SelectDepartment = request.POST["SelectDepartment"]
+		SelectSemester = request.POST["SelectSemester"]
+		data.Entername=Entername
+		data.Emailid=Emailid
+		data.Contactno=Contactno
+		data.EnterAddress=EnterAddress
+		data.SelectYear=SelectYear
+		data.SelectGender=SelectGender
+		data.Rollno=Rollno
+		data.SelectDepartment=SelectDepartment
+		data.SelectSemester=SelectSemester
+		data.save()
+		return redirect('/studentreport')
 
-		
+	return render(request,'results/update.html',{'mydata':data})
+
+def delete(request,Entername):
+	data=Addstudents.objects.get(Entername=Entername)
+	data.delete()
+	return redirect('/studentreport')
+
 def studentreport(request):
-	form=StudentsreportForm(request.POST)
-	if form.is_valid():
-		form.save()
-	context={'form':form}
-	return render(request,'results/studentreport.html',context)
+	if request.method=="POST":
+		rollno=request.POST["rollno"]
+		obj=Addstudents.objects.filter(Rollno=rollno)
+		print(obj)
+		return render(request,'results/studentreport.html',{'info':obj})
+		data=Addstudents.objects.all()
+		return render(request,'results/studentreport.html',{'info':data})
+		form=StudentsreportForm(request.POST)
+		if form.is_valid():
+			form.save()
+		context={'form':form}
+		return render(request,'results/studentreport.html',context)
+
 
 def addsubjects(request):
 	form=AddsubjectForm(request.POST)
