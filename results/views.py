@@ -27,7 +27,7 @@ def addstudent(request):
 		SelectSemester = request.POST["SelectSemester"]
 		instance = Addstudents(Entername=Entername, Emailid=Emailid,Contactno=Contactno, EnterAddress=EnterAddress, SelectYear=SelectYear, SelectGender=SelectGender, Rollno=Rollno, SelectDepartment=SelectDepartment, SelectSemester=SelectSemester)
 		instance.save()
-		return HttpResponse('Success')
+		return redirect('/addstudent')
 		
 	else:
 		form=AddstudentsForm()
